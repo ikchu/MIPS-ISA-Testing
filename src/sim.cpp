@@ -54,13 +54,20 @@ int main(int argc, char **argv) {
         file.seekg (0, ios::beg);
         file.read (memblock, size);
         file.close();
+
+        printf("size: %#x\n", (int)size);
+        for (int i = 0; i < size; i++) {
+            printf("%02hhx", memblock[i]);
+            if ((i+1) % 4 == 0) printf("\n");
+        }
+
         // transfer file line-by-line from real memory to abstract MemoryStore memory
         if (size % WORD_SIZE != 0) { // maybe don't need this check?
             cout << "Binary file should have an integer number of 4-byte instructions";
             return 1;
         }
-        for (int addr = 0; addr + WORD_SIZE <= size; addr += WORD_SIZE){
-            myMem->setMemValue(addr, memblock[addr], WORD_SIZE);
+        for (int addr = 0; addr <= size; addr++){
+            myMem->setMemValue(addr, memblock[addr], BYTE_SIZE);
         }
         // delete file from real memory. Now use MemoryStore object
         delete[] memblock;
@@ -82,8 +89,7 @@ int main(int argc, char **argv) {
 
     // 0xfeedfeed code. Using it to test that I'm saving the bin file correctly
     RegisterInfo reg;
-    int i;
-    for (i = 0; i < NUM_REGS; i++) {
+    for (int i = 0; i < NUM_REGS; i++) {
         switch (i) {
             case Z_OFFSET:                      // regs[0] - The $zero register (not included in RegisterInfo object)
                 ;
