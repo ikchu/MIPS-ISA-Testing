@@ -118,28 +118,40 @@ void dump(uint32_t (&regs)[NUM_REGS], MemoryStore *myMem) {
         switch (i) {
             case AT_OFFSET:                         // regs[1] - The $at register.
                 reg.at = regs[i];
+                break;
             case V_OFFSET ... A_OFFSET-1:           // regs[2:3] - The $v registers.
                 reg.v[i - V_OFFSET] = regs[i];
+                break;
             case A_OFFSET ... T07_OFFSET-1:         // regs[4:7] - The $a registers.
                 reg.a[i - A_OFFSET] = regs[i];
+                break;
             case T07_OFFSET ... S_OFFSET-1:         // regs[8:15] - The $t0-$t7 registers.
                 reg.t[i - T07_OFFSET] = regs[i];
+                break;
             case S_OFFSET ... T8_OFFSET-1:          // regs[16:23] - The $s registers.
                 reg.s[i - S_OFFSET] = regs[i];
+                break;
             case T8_OFFSET:                         // regs[24] - The $t8 register.
                 reg.t[8] = regs[i];
+                break;
             case T9_OFFSET:                         // regs[25] - The $t9 register.
                 reg.t[9] = regs[i];
+                break;
             case K_OFFSET ... GP_OFFSET-1:          // regs[26:27] - The $k registers.
                 reg.k[i - K_OFFSET] = regs[i];
+                break;
             case GP_OFFSET:                         // regs[28] - The $gp register.
                 reg.gp = regs[i];
+                break;
             case SP_OFFSET:                         // regs[29] - The $sp register.
                 reg.sp = regs[i];
+                break;
             case FP_OFFSET:                         // regs[30] - The $fp register.
                 reg.fp = regs[i];
+                break;
             case RA_OFFSET:                         // regs[31] - The $ra register.
                 reg.ra = regs[i];
+                break;
         }
     }
     dumpRegisterState(reg);
