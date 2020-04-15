@@ -1,7 +1,9 @@
 *.pdf
 *.tar.gz
 
-reg_state.out
-mem_state.out
+*.out
+
+*.elf
+*.bin
 
 .vscode/

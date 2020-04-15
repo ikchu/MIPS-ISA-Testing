@@ -162,7 +162,6 @@ void dump(uint32_t (&regs)[NUM_REGS], MemoryStore *myMem) {
 // Helper function which does the fetch/decode/execute steps
 //-------------------------------------------------------------------------
 void instruction_helper(uint32_t &pc, uint32_t (&regs)[NUM_REGS], MemoryStore *myMem) {
-    printf("PC of Current Instruction = 0x%02x\n", pc);
     // Fetch instruction
     uint32_t instr;
     myMem->getMemValue(pc, instr, WORD_SIZE);
@@ -285,28 +284,28 @@ void instruction_helper(uint32_t &pc, uint32_t (&regs)[NUM_REGS], MemoryStore *m
 
         case BEQ_O:
             instruction_helper(pc, regs, myMem);
-            if (regs[rs] == regs[rt]) {
+            if ((int) regs[rs] == (int) regs[rt]) { // NOTE: int casts don't do anything since it's a bitwise comp. just inserted for continuity
                 pc = (pc - 4) + SIGNEX(imm << 2, 17);
             }
             break;
 
         case BNE_O:
             instruction_helper(pc, regs, myMem);
-            if (regs[rs] != regs[rt]) {
+            if ((int) regs[rs] != (int) regs[rt]) { // NOTE: int casts don't do anything since it's a bitwise comp. just inserted for continuity
                 pc = (pc - 4) + SIGNEX(imm << 2, 17);;
             }
             break;
         
         case BGTZ_O:
             instruction_helper(pc, regs, myMem);
-            if (regs[rs] > 0) {
+            if ((int) regs[rs] > 0) {
                 pc = (pc - 4) + SIGNEX(imm << 2, 17);
             }
             break;
 
         case BLEZ_O:
             instruction_helper(pc, regs, myMem);
-            if (regs[rs] <= 0) {
+            if ((int) regs[rs] <= 0) {
                 pc = (pc - 4) + SIGNEX(imm << 2, 17);;
             }
             break;
@@ -348,7 +347,7 @@ void instruction_helper(uint32_t &pc, uint32_t (&regs)[NUM_REGS], MemoryStore *m
             break;
 
         case SLTIU_O:
-            regs[rt] = (regs[rs] < (uint32_t) SIGNEX(imm, IMM_SIGN_BIT)) ? 1 : 0;
+            regs[rt] = ((uint32_t) regs[rs] < (uint32_t) SIGNEX(imm, IMM_SIGN_BIT)) ? 1 : 0;
             break;
 
         case SB_O:
