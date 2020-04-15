@@ -165,8 +165,6 @@ void instruction_helper(uint32_t &pc, uint32_t (&regs)[NUM_REGS], MemoryStore *m
     // Fetch instruction
     uint32_t instr;
     myMem->getMemValue(pc, instr, WORD_SIZE);
-    // printf("Current Instruction: 0x%08x\n", instr);
-    // cout << "Binary Form: " << std::bitset<32>(instr) << std::endl;
 
     // Increment PC immediately. Operations below will be on the incremented PC and will take this into account
     pc = pc + 4;
@@ -180,7 +178,6 @@ void instruction_helper(uint32_t &pc, uint32_t (&regs)[NUM_REGS], MemoryStore *m
     uint32_t funct  = (instr & FUNCT_MASK) >> FUNCT_BITS;
     uint32_t imm    = (instr & IMM_MASK) >> IMM_BITS;
     uint32_t addr   = (instr & ADDR_MASK) >> ADDR_BITS;
-    // printf("opcode: 0x%x\nrs:     0x%x\nrt:     0x%x\nrd:     0x%x\nshamt:  0x%x\nfunct:  0x%x\nimm:    0x%x\nSE_imm: 0x%x\naddr:   0x%x\n\n", opcode, rs, rt, rd, shamt, funct, imm, SIGNEX(imm, 15), addr);
 
     // Exit Case
     if (instr == EXIT_INSTRUCTION) {
@@ -213,7 +210,6 @@ void instruction_helper(uint32_t &pc, uint32_t (&regs)[NUM_REGS], MemoryStore *m
         case 0x00:
             switch (funct) {
                 case ADD_F:
-                    // P2 TODO: handle overflow here. currently ignoring
                     regs[rd] = regs[rs] + regs[rt];
                     break;
 
@@ -255,7 +251,6 @@ void instruction_helper(uint32_t &pc, uint32_t (&regs)[NUM_REGS], MemoryStore *m
                     break;
 
                 case SUB_F:
-                    // P2 TODO: handle overflow here. currently ignoring
                     regs[rd] = regs[rs] - regs[rt];
                     break;
 
@@ -270,7 +265,6 @@ void instruction_helper(uint32_t &pc, uint32_t (&regs)[NUM_REGS], MemoryStore *m
             break;
 
         case ADDI_O:
-            // P2 TODO: handle overflow here. currently ignoring
             regs[rt] = regs[rs] + SIGNEX(imm, IMM_SIGN_BIT);
             break;
 
@@ -327,7 +321,7 @@ void instruction_helper(uint32_t &pc, uint32_t (&regs)[NUM_REGS], MemoryStore *m
         
         case LHU_O:
             myMem->getMemValue(regs[rs]+SIGNEX(imm, IMM_SIGN_BIT), regs[rt], HALF_SIZE);
-            regs[rt] = HALF_MASK & regs[rt]; // TODO: I think this isn't even necessary? need to check whether myMem functs return bigendian
+            regs[rt] = HALF_MASK & regs[rt];
             break;
 
         case LUI_O:
@@ -414,7 +408,7 @@ int main(int argc, char **argv) {
         for (uint32_t i = 0; i <= size; i++) {
             myMem->setMemValue(i, (uint32_t) memblock[i], BYTE_SIZE);
         }
-        // delete initial allocation from real memory. Now use MemoryStore object
+        // delete initial allocation of real memory. Now use MemoryStore object
         delete[] memblock;
     }
     else {
@@ -423,9 +417,8 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-    // Fetch/Decode/Execute Instructions 
+    // Fetch/Decode/Execute instructions, exit upon encountering instruction 0xfeedfeed
     while (true) {
-        // exits loop upon encountering 0xfeedfeed instruction
         instruction_helper(pc, regs, myMem);
     }
 }
