@@ -1,6 +1,7 @@
 # Statement Test: sltiu
 # set-less-than-imm-unsigned with positive/negative imms and <, >, == cases for each
-li    $t0, 2
+main:
+      li    $t0, 2
       sltiu $t1, $t0, -1
       sltiu $t2, $t0, 1
       sltiu $t3, $t0, 2

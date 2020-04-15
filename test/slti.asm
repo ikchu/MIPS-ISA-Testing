@@ -1,5 +1,6 @@
 # Statement Test: slti
 # set-less-than-imm with positive/negative imms and <, >, == cases for each
+main:
       li    $t0, 2
       slti  $t1, $t0, -1
       slti  $t2, $t0, 1

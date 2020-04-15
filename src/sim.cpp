@@ -391,15 +391,6 @@ int main(int argc, char **argv) {
         file.read (memblock, size);
         file.close();
 
-        // Printing parsed binary file
-        printf("\nFile Size (Bytes): %#x\n\n", (int)size);
-        for (int i = 0; i < size; i++) {
-            printf("%02hhx", memblock[i]);
-            if ((i+1) % 4 == 0) printf(" ");
-            if ((i+1) % 20 == 0) printf("\n");
-        }
-        printf("\n\n");
-
         // transfer file line-by-line from real memory to abstracted MemoryStore memory
         if (size % WORD_SIZE != 0) {
             cout << "Binary file should have an integer number of 4-byte instructions";
